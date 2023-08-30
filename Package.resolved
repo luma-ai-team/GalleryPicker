@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "EasyUI",
+        "repositoryURL": "https://github.com/SocialKitLtd/EasyUI",
+        "state": {
+          "branch": "main",
+          "revision": "7cead57feb57d15933a56da5f17e2e1f65e17fea",
+          "version": null
+        }
+      },
+      {
+        "package": "FoundationUI",
+        "repositoryURL": "https://github.com/SocialKitLtd/FoundationUI",
+        "state": {
+          "branch": "main",
+          "revision": "62962e877008f83e6ffc9d1c7c545ed6183acd91",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

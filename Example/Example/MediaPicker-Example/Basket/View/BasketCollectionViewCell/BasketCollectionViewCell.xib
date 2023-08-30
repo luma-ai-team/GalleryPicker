@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BasketCollectionViewCell" id="gTV-IL-0wX" customClass="BasketCollectionViewCell" customModule="Example" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="44" height="70"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="44" height="70"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pwC-rr-cGg">
+                        <rect key="frame" x="0.0" y="8" width="36" height="62"/>
+                    </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AqX-3u-cEq">
+                        <rect key="frame" x="0.0" y="8" width="36" height="62"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.20493197278911565" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="piL-O0-psV">
+                        <rect key="frame" x="2.5" y="51" width="31.5" height="15"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w3m-5H-x7e" customClass="BounceButton" customModule="CoreUI">
+                        <rect key="frame" x="10" y="0.0" width="34" height="34"/>
+                        <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="10"/>
+                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        <state key="normal" image="deleteBasket">
+                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="21" weight="regular"/>
+                        </state>
+                        <connections>
+                            <action selector="deleteTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="JD0-pl-oEZ"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="AqX-3u-cEq" firstAttribute="height" secondItem="pwC-rr-cGg" secondAttribute="height" id="2Ha-fv-D9R"/>
+                <constraint firstAttribute="trailing" secondItem="pwC-rr-cGg" secondAttribute="trailing" constant="8" id="5zF-g9-eiT"/>
+                <constraint firstItem="piL-O0-psV" firstAttribute="bottom" secondItem="pwC-rr-cGg" secondAttribute="bottom" constant="-4" id="Ilf-Uf-ZEB"/>
+                <constraint firstAttribute="bottom" secondItem="pwC-rr-cGg" secondAttribute="bottom" id="NCN-Az-ceA"/>
+                <constraint firstItem="piL-O0-psV" firstAttribute="centerX" secondItem="pwC-rr-cGg" secondAttribute="centerX" id="RR9-9l-QJG"/>
+                <constraint firstItem="AqX-3u-cEq" firstAttribute="centerX" secondItem="pwC-rr-cGg" secondAttribute="centerX" id="SKG-HE-f94"/>
+                <constraint firstItem="pwC-rr-cGg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="WIz-0l-Vk8"/>
+                <constraint firstItem="AqX-3u-cEq" firstAttribute="centerY" secondItem="pwC-rr-cGg" secondAttribute="centerY" id="aiO-gs-eyk"/>
+                <constraint firstItem="AqX-3u-cEq" firstAttribute="width" secondItem="pwC-rr-cGg" secondAttribute="width" id="gjx-Xh-Ak1"/>
+                <constraint firstAttribute="trailing" secondItem="w3m-5H-x7e" secondAttribute="trailing" id="jbI-8C-5XV"/>
+                <constraint firstItem="w3m-5H-x7e" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="n59-i8-h2v"/>
+                <constraint firstItem="pwC-rr-cGg" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="nrm-Fc-MdQ"/>
+            </constraints>
+            <size key="customSize" width="191" height="278"/>
+            <connections>
+                <outlet property="deleteButton" destination="w3m-5H-x7e" id="quI-7I-Dts"/>
+                <outlet property="imageView" destination="pwC-rr-cGg" id="oiJ-nQ-pSF"/>
+                <outlet property="selectionView" destination="AqX-3u-cEq" id="SCS-fm-TFi"/>
+                <outlet property="timeLabel" destination="piL-O0-psV" id="zft-DF-kLD"/>
+            </connections>
+            <point key="canvasLocation" x="239.85507246376812" y="105.80357142857143"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="deleteBasket" width="24" height="24"/>
+    </resources>
+</document>

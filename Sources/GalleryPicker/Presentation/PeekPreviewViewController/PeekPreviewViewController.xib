@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PeekPreviewViewController" customModule="GalleryPicker">
+            <connections>
+                <outlet property="imageView" destination="oXz-bg-NSx" id="NRG-SP-EWY"/>
+                <outlet property="indicator" destination="8WA-BR-OS0" id="3xd-9M-7bZ"/>
+                <outlet property="playerView" destination="uNB-mc-wcr" id="HCF-HH-MyR"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oXz-bg-NSx">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNB-mc-wcr" customClass="PlayerView" customModule="CoreUI">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="8WA-BR-OS0">
+                    <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                    <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </activityIndicatorView>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="oXz-bg-NSx" firstAttribute="centerY" secondItem="uNB-mc-wcr" secondAttribute="centerY" id="6AZ-Wp-aIn"/>
+                <constraint firstItem="uNB-mc-wcr" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="AUi-py-Esy"/>
+                <constraint firstItem="uNB-mc-wcr" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Znk-eb-W7d"/>
+                <constraint firstItem="oXz-bg-NSx" firstAttribute="centerX" secondItem="uNB-mc-wcr" secondAttribute="centerX" id="bZi-ta-7d6"/>
+                <constraint firstItem="8WA-BR-OS0" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="kVQ-ub-w2n"/>
+                <constraint firstItem="oXz-bg-NSx" firstAttribute="width" secondItem="uNB-mc-wcr" secondAttribute="width" id="loG-V4-xFv"/>
+                <constraint firstItem="uNB-mc-wcr" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="mox-ir-3dQ"/>
+                <constraint firstItem="uNB-mc-wcr" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" id="muX-Ce-EMg"/>
+                <constraint firstItem="8WA-BR-OS0" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="rQL-lJ-nMf"/>
+                <constraint firstItem="oXz-bg-NSx" firstAttribute="height" secondItem="uNB-mc-wcr" secondAttribute="height" id="xLe-Z8-B4z"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="153"/>
+        </view>
+    </objects>
+</document>

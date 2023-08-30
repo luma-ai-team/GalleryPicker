@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="NewYorkMedium-BoldItalic.otf">
+            <string>NewYorkMedium-BoldItalic</string>
+        </array>
+        <array key="NewYorkMedium-MediumItalic.otf">
+            <string>NewYorkMedium-MediumItalic</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="AlbumsTableViewCell" rowHeight="189" id="Pzy-PD-nRP" customClass="AlbumsTableViewCell" customModule="GalleryPicker">
+            <rect key="frame" x="0.0" y="0.0" width="398" height="189"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pzy-PD-nRP" id="wHu-ls-SgY">
+                <rect key="frame" x="0.0" y="0.0" width="398" height="189"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r7r-bb-jmi" userLabel="imageView">
+                        <rect key="frame" x="16" y="59.5" width="70" height="70"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="4aG-0A-fsD"/>
+                            <constraint firstAttribute="height" constant="70" id="ysV-Mg-ltb"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="diX-QD-tqs" userLabel="countLabel">
+                        <rect key="frame" x="102" y="98" width="260" height="16"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <fontDescription key="fontDescription" name="NewYorkMedium-MediumItalic" family="New York Medium" pointSize="13"/>
+                        <color key="textColor" name="subtitle"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Compressed Videos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lao-et-Q8T" userLabel="titleLabel">
+                        <rect key="frame" x="102" y="71" width="260" height="19"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <fontDescription key="fontDescription" name="NewYorkMedium-BoldItalic" family="New York Medium" pointSize="16"/>
+                        <color key="textColor" name="title"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="lao-et-Q8T" firstAttribute="leading" secondItem="r7r-bb-jmi" secondAttribute="trailing" constant="16" id="8JC-6w-mml"/>
+                    <constraint firstItem="diX-QD-tqs" firstAttribute="trailing" secondItem="lao-et-Q8T" secondAttribute="trailing" id="Hvn-U3-ACZ"/>
+                    <constraint firstItem="r7r-bb-jmi" firstAttribute="centerY" secondItem="wHu-ls-SgY" secondAttribute="centerY" id="Lia-AT-mxB"/>
+                    <constraint firstItem="diX-QD-tqs" firstAttribute="top" secondItem="lao-et-Q8T" secondAttribute="bottom" constant="8" id="V7I-g0-xv9"/>
+                    <constraint firstItem="r7r-bb-jmi" firstAttribute="leading" secondItem="wHu-ls-SgY" secondAttribute="leading" constant="16" id="fpv-gW-3Lp"/>
+                    <constraint firstItem="lao-et-Q8T" firstAttribute="centerY" secondItem="wHu-ls-SgY" secondAttribute="centerY" constant="-14" id="ifz-Nb-IQl"/>
+                    <constraint firstItem="diX-QD-tqs" firstAttribute="leading" secondItem="lao-et-Q8T" secondAttribute="leading" id="kIb-3W-gJ2"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="lao-et-Q8T" secondAttribute="trailing" constant="16" id="nl4-hD-0qS"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <inset key="separatorInset" minX="124" minY="0.0" maxX="20" maxY="0.0"/>
+            <connections>
+                <outlet property="countLabel" destination="diX-QD-tqs" id="zvK-nT-vb2"/>
+                <outlet property="thumbnailImageView" destination="r7r-bb-jmi" id="VUu-Nt-P8z"/>
+                <outlet property="titleLabel" destination="lao-et-Q8T" id="F5K-vK-wBj"/>
+            </connections>
+            <point key="canvasLocation" x="65.217391304347828" y="-13.058035714285714"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="subtitle">
+            <color red="0.42399999499320984" green="0.45100000500679016" blue="0.4779999852180481" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="title">
+            <color red="0.24300000071525574" green="0.25900000333786011" blue="0.27799999713897705" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>
