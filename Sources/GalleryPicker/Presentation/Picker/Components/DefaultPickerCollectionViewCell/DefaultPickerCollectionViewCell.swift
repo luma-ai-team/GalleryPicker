@@ -19,7 +19,12 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
     public var colorScheme: ColorScheme?
 
     // MARK: - Views
-
+    public lazy var floatingElementsContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     public lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -30,10 +35,9 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
     }()
 
     public lazy var livePhotoBadgeImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "livephoto", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17, weight: .bold)))
+        let view = UIImageView(image: UIImage(systemName: "livephoto", withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)))
         view.contentMode = .scaleAspectFit
         view.tintColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -44,15 +48,13 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
         label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .white
         label.backgroundColor = .clear
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     public lazy var favoriteBadgeImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold)))
+        let view = UIImageView(image: UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)))
         view.contentMode = .scaleAspectFit
         view.tintColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -74,25 +76,27 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
     // MARK: - Setup
 
     private func setupViews() {
-        [imageView, livePhotoBadgeImageView, durationLabel, favoriteBadgeImageView, selectionView].forEach { view in
-            contentView.addSubview(view)
-            view.isUserInteractionEnabled = false
+        [imageView, floatingElementsContainer, selectionView].forEach {
+            contentView.addSubview($0)
+            $0.isUserInteractionEnabled = false
         }
         
-        [livePhotoBadgeImageView, durationLabel, favoriteBadgeImageView].forEach { view in
-            view.applyShadow(color: .black, radius: 8, opacity: 0.65, offsetY: 2, offsetX: 0)
-            view.layer.shouldRasterize = true
-            view.layer.rasterizationScale = UIScreen.main.scale
+        [favoriteBadgeImageView, durationLabel, livePhotoBadgeImageView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            floatingElementsContainer.addSubview($0)
         }
         
+        floatingElementsContainer.applyShadow(color: .black, radius: 10, opacity: 1, offsetY: 0, offsetX: 0)
 
         contentView.clipsToBounds = true
         clipsToBounds = true
-        // Assuming `roundCorners(to:)` is a function or extension you have defined elsewhere
         contentView.roundCorners(to: .custom(8))
     }
 
     private func setupConstraints() {
+        floatingElementsContainer.bindMarginsToSuperview()
+        selectionView.bindMarginsToSuperview()
+        
         NSLayoutConstraint.activate([
             // ImageView
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -101,19 +105,19 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
             // LivePhotoBadgeImageView
-            livePhotoBadgeImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            livePhotoBadgeImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            livePhotoBadgeImageView.topAnchor.constraint(equalTo: floatingElementsContainer.topAnchor, constant: 5),
+            livePhotoBadgeImageView.trailingAnchor.constraint(equalTo: floatingElementsContainer.trailingAnchor, constant: -5),
    
             // DurationLabel
-            durationLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-            durationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
+            durationLabel.bottomAnchor.constraint(equalTo: floatingElementsContainer.bottomAnchor, constant: -5),
+            durationLabel.trailingAnchor.constraint(equalTo: floatingElementsContainer.trailingAnchor, constant: -6),
             
             // FavoriteBadgeImageView
-            favoriteBadgeImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-            favoriteBadgeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5)
+            favoriteBadgeImageView.bottomAnchor.constraint(equalTo: floatingElementsContainer.bottomAnchor, constant: -5),
+            favoriteBadgeImageView.leadingAnchor.constraint(equalTo: floatingElementsContainer.leadingAnchor, constant: 5)
         ])
 
-        selectionView.bindMarginsToSuperview()
+       
     }
 
     // MARK: - Cell Lifecycle
