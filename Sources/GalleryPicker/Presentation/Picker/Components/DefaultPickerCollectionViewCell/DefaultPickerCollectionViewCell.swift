@@ -16,7 +16,6 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
     // MARK: - Public Properties
 
     public var item: MediaItem?
-    public var gradientImage: UIImage?
     public var colorScheme: ColorScheme?
 
     // MARK: - Views
@@ -31,17 +30,9 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
     }()
 
     public lazy var livePhotoBadgeImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "livephoto", withConfiguration: UIImage.SymbolConfiguration(pointSize: 13, weight: .bold)))
+        let view = UIImageView(image: UIImage(systemName: "livephoto", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17, weight: .bold)))
         view.contentMode = .scaleAspectFit
         view.tintColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    public lazy var gradientView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleToFill
-        view.backgroundColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -58,7 +49,7 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
     }()
 
     public lazy var favoriteBadgeImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 13, weight: .semibold)))
+        let view = UIImageView(image: UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold)))
         view.contentMode = .scaleAspectFit
         view.tintColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -83,10 +74,17 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
     // MARK: - Setup
 
     private func setupViews() {
-        [imageView, gradientView, livePhotoBadgeImageView, durationLabel, favoriteBadgeImageView, selectionView].forEach { view in
+        [imageView, livePhotoBadgeImageView, durationLabel, favoriteBadgeImageView, selectionView].forEach { view in
             contentView.addSubview(view)
             view.isUserInteractionEnabled = false
         }
+        
+        [livePhotoBadgeImageView, durationLabel, favoriteBadgeImageView].forEach { view in
+            view.applyShadow(color: .black, radius: 8, opacity: 0.65, offsetY: 2, offsetX: 0)
+            view.layer.shouldRasterize = true
+            view.layer.rasterizationScale = UIScreen.main.scale
+        }
+        
 
         contentView.clipsToBounds = true
         clipsToBounds = true
@@ -106,12 +104,6 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
             livePhotoBadgeImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
             livePhotoBadgeImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
    
-            // GradientView
-            gradientView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            gradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            gradientView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            gradientView.heightAnchor.constraint(equalToConstant: 43),
-            
             // DurationLabel
             durationLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
             durationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
@@ -143,12 +135,8 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
         if let duration = item.duration, duration > 0 {
             durationLabel.text = duration.toReadableMinutesAndSecondsString()
             durationLabel.isHidden = false
-            gradientView.isHidden = false
-            gradientView.image = gradientImage
         } else {
             durationLabel.isHidden = true
-            gradientView.isHidden = true
-            gradientView.image = nil
         }
         
         let isSelected = selectCount > 0

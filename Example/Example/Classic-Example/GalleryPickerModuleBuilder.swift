@@ -20,7 +20,7 @@ class GalleryPickerModuleBuilder {
         let configuration = galleryPickerService.createGalleryPickerConfiguration()
         configuration.filter.shouldTreatLivePhotosAsVideos = true
         configuration.appearance.navigationBarStyle = .init(style: .solidColor(Constants.colorScheme.background), isStatusBarHidden: false, statusBarStyle: .darkContent)
-        configuration.filter.supportedMediaTypes = .video
+        configuration.filter.supportedMediaTypes = .all
         configuration.pickerConfiguration.categories = [
             .init(title: "All", predicate: nil),
             .init(title: "Videos", predicate: .init(format: "mediaType = %d", PHAssetMediaType.video.rawValue)),

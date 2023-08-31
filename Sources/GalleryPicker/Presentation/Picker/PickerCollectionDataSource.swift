@@ -94,11 +94,8 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         let scale = UIScreen.main.scale
         let baseSize = self.collectionView(collectionView, layout: collectionView.collectionViewLayout, sizeForItemAt: indexPath)
         let scaledSize = baseSize.applying(.init(scaleX: scale, y: scale))
-        
-        GallerySharedResources.shared.configureCellGradient(for: .init(width: baseSize.width, height: 31))
-        
+     
         let selectCount = selectedItems.filter { $0 == item }.count
-        cell.gradientImage = GallerySharedResources.shared.cellGradientImage
         cell.configure(with: item, selectCount: selectCount, shouldDisplayLivePhotoBage: shouldPreloadMetadata)
         
         GalleryAssetService.shared.fetchThumbnail(for: item, size: scaledSize) { (image: UIImage?) in

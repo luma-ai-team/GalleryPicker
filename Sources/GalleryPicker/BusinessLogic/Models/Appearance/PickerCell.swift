@@ -12,7 +12,6 @@ public protocol PickerCell: UICollectionViewCell {
     static var identifier: String { get }
     var item: MediaItem? { get set }
     var imageView: UIImageView { get set }
-    var gradientImage: UIImage? { get set }
     var colorScheme: ColorScheme? { get set }
     static func register(in collectionView: UICollectionView)
     func configure(with item: MediaItem, selectCount: Int, shouldDisplayLivePhotoBage: Bool)
