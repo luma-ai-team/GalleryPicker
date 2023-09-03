@@ -83,6 +83,7 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
         
         [favoriteBadgeImageView, durationLabel, livePhotoBadgeImageView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.isUserInteractionEnabled = false
             floatingElementsContainer.addSubview($0)
         }
         

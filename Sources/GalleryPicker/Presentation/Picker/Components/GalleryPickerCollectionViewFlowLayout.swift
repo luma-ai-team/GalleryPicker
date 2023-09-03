@@ -14,7 +14,7 @@ public class GalleryPickerCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     public override init() {
         super.init()
-        sectionInset = .init(top: 12, left: 16, bottom: 0, right: 16)
+        sectionInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         minimumLineSpacing = 8
         minimumInteritemSpacing = 8
     }
