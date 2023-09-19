@@ -31,7 +31,7 @@ public final class PickerViewController: UIViewController {
     private var didPerformInitialAnimation: Bool = false
 
     private lazy var deniedRequestPermissionView: PermissionsPlaceholderView = {
-        let view = NoPermissionsBasicView.create(with: viewModel.appearance.colorScheme)
+        let view = NoPermissionsView.create(with: viewModel.appearance.colorScheme)
         view.delegate = self
         view.alpha = 0
         return view

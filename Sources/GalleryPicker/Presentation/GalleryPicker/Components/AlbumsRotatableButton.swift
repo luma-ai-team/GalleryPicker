@@ -44,7 +44,7 @@ public class AlbumsRotatableButton: BounceButton {
     private func setup() {
         contentHorizontalAlignment = .left
         addSubview(arrowView)
-        arrowView.image = UIImage(named: "arrow", in: .module, with: nil)
+        arrowView.image = UIImage(systemName: "chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold))
         titleLabel?.font = UIFont.roundedFont(size: 18, weight: .semibold)
     }
     
