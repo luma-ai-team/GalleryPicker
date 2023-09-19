@@ -91,7 +91,7 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
 
         contentView.clipsToBounds = true
         clipsToBounds = true
-        contentView.roundCorners(to: .custom(8))
+        contentView.roundCorners(to: .custom(0))
     }
 
     private func setupConstraints() {
