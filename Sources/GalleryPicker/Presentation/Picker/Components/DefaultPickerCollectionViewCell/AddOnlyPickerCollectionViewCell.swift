@@ -38,8 +38,8 @@ open class AddOnlyPickerCollectionViewCell: DefaultPickerCollectionViewCell {
     }
     
     
-    public override func configure(with item: MediaItem, selectCount: Int, shouldDisplayLivePhotoBage: Bool) {
-        super.configure(with: item, selectCount: selectCount, shouldDisplayLivePhotoBage: shouldDisplayLivePhotoBage)
+    public override func configure(with item: MediaItem, selectCount: Int, representativeIndex: Int? , shouldDisplayLivePhotoBage: Bool) {
+        super.configure(with: item, selectCount: selectCount, representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: shouldDisplayLivePhotoBage)
         
         countLabel.setTitle("\(selectCount)x", for: .normal)
         

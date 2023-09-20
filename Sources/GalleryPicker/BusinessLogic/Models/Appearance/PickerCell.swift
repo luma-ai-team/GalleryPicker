@@ -14,6 +14,6 @@ public protocol PickerCell: UICollectionViewCell {
     var imageView: UIImageView { get set }
     var colorScheme: ColorScheme? { get set }
     static func register(in collectionView: UICollectionView)
-    func configure(with item: MediaItem, selectCount: Int, shouldDisplayLivePhotoBage: Bool)
+    func configure(with item: MediaItem, selectCount: Int, representativeIndex: Int? ,shouldDisplayLivePhotoBage: Bool)
     func reloadThumbnail()
 }

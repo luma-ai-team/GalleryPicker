@@ -19,6 +19,7 @@ class GalleryPickerModuleBuilder {
         
         let configuration = galleryPickerService.createGalleryPickerConfiguration()
         configuration.filter.shouldTreatLivePhotosAsVideos = true
+        configuration.pickerConfiguration.pickerSelectionStyle = .selection(limit: 15)
         configuration.appearance.navigationBarStyle = .init(style: .solidColor(Constants.colorScheme.background), isStatusBarHidden: false, statusBarStyle: .darkContent)
         configuration.filter.supportedMediaTypes = .all
         configuration.pickerConfiguration.categories = [
@@ -39,7 +40,7 @@ class GalleryPickerModuleBuilder {
         let galleryPickerModule = GalleryPickerModule(state: .init(galleryPickerConfiguration: configuration))
        
         
-        galleryPickerService.connectAssetFetchOutout(galleryPickerModule: galleryPickerModule, assetFetchOutput: target)
+       // galleryPickerService.connectAssetFetchOutout(galleryPickerModule: galleryPickerModule, assetFetchOutput: target)
         
         return galleryPickerModule
     }
