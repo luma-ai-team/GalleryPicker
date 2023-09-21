@@ -30,9 +30,9 @@ public final class PickerViewController: UIViewController {
     private let output: PickerViewOutput
     private var didPerformInitialAnimation: Bool = false
 
-    private lazy var deniedRequestPermissionView: PermissionsPlaceholderView = {
-        let view = NoPermissionsView.create(with: viewModel.appearance.colorScheme)
-        view.delegate = self
+    private lazy var enablePermissionView: EnablePermissionView = {
+        let view = EnablePermissionView()
+        view.applyColor(colorScheme: viewModel.appearance.colorScheme)
         view.alpha = 0
         return view
     }()
@@ -133,7 +133,7 @@ public final class PickerViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        view.addSubview(deniedRequestPermissionView)
+        view.addSubview(enablePermissionView)
         view.addSubview(noMediaView)
         view.sendSubviewToBack(noMediaView)
         
@@ -154,7 +154,7 @@ public final class PickerViewController: UIViewController {
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        deniedRequestPermissionView.frame = view.bounds
+        enablePermissionView.frame = view.bounds
         view.bringSubviewToFront(openGalleryContainerView)
     }
     
@@ -242,13 +242,13 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
         update(new: viewModel, old: oldViewModel, keyPath: \.permissionStatus, force: force) { (status) in
             switch status {
             case .denied, .restricted:
-                deniedRequestPermissionView.alpha = 1
+                enablePermissionView.alpha = 1
                 openGalleryContainerView.alpha = 1
             case .limited:
-                deniedRequestPermissionView.alpha = 0
+                enablePermissionView.alpha = 0
                 openGalleryContainerView.alpha = 1
             case .authorized, .notDetermined:
-                deniedRequestPermissionView.alpha = 0
+                enablePermissionView.alpha = 0
                 openGalleryContainerView.alpha = 0
             @unknown default:
                 break
@@ -287,16 +287,3 @@ extension PickerViewController: PickerCollectionDataSourceOutput {
         output.mediaItemDeselectionEventTriggered(mediaItem: mediaItem)
     }
 }
-
-// MARK: - PermissionsPlaceholderViewDelegate
-
-extension PickerViewController: PermissionsPlaceholderViewDelegate {
-    public func permissionsPlaceholderViewDidRequestSettings(_ sender: PermissionsPlaceholderView) {
-        output.fullAccessRequestEventTriggered()
-    }
-
-    public func permissionsPlaceholderViewDidRequestActivate(_ sender: PermissionsPlaceholderView) {
-        output.activationRequestEventTriggered()
-    }
-}
-
