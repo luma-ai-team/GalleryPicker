@@ -38,11 +38,7 @@ final class GalleryCoordinator: BaseCoordinator<UINavigationController> {
     func dismissAlbumsViewController() {
         rootViewController.dismiss(animated: true, completion: nil)
     }
-    
-    func openFullAccessSettings() {
-        PhotoLibraryPermission.redirectToSettings()
-    }
-    
+
     
     func pickerModuleDidRequestSystemPicker(_ moduleInput: GalleryPickerModuleInput) {
         let state = moduleInput.state

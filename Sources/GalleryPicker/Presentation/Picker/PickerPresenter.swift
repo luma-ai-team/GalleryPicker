@@ -20,10 +20,6 @@ final class PickerPresenter {
 
 extension PickerPresenter: PickerViewOutput {
     
-    func fullAccessRequestEventTriggered() {
-        output?.pickerModuleWantsToOpenFullAccessSettings(self)
-    }
-
     func activationRequestEventTriggered() {
         output?.pickerModuleDidRequestActivate(self)
     }

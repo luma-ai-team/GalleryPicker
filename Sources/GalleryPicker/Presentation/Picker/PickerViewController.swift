@@ -14,7 +14,6 @@ protocol PickerViewInput: AnyObject {
 protocol PickerViewOutput: AnyObject {
     func viewDidLoad()
 
-    func fullAccessRequestEventTriggered()
     func activationRequestEventTriggered()
     func systemPickerEventTriggered()
 
@@ -136,9 +135,9 @@ public final class PickerViewController: UIViewController {
         view.addSubview(enablePermissionView)
         view.addSubview(noMediaView)
         view.sendSubviewToBack(noMediaView)
+            
+        collectionView.register(LimitedHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LimitedHeaderCell")
         
-        let limitedNib = UINib(nibName: "LimitedAccessCollectionHeaderCell", bundle: Bundle.module)
-        collectionView.register(limitedNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: LimitedAccessCollectionHeaderCell.identifier)
         
         let scopeNib = UINib(nibName: "SearchScopeCollectionHeaderCell", bundle: Bundle.module)
         collectionView.register(scopeNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchScopeCollectionHeaderCell.identifier)
@@ -270,10 +269,6 @@ extension PickerViewController: PickerCollectionDataSourceOutput {
         Haptic.selection.generate()
         collectionView.contentOffset.y = 0
         output.categorySelectionEventTriggered(category: category)
-    }
-    
-    func collectionViewDidRequestHeaderAction(_ sender: PickerCollectionDataSource) {
-        output.fullAccessRequestEventTriggered()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelect mediaItem: MediaItem) {

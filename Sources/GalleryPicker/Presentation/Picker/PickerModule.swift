@@ -19,7 +19,6 @@ public protocol PickerModuleOutput: AnyObject {
     func pickerModule(_ moduleInput: PickerModuleInput, didSelect mediaItem: MediaItem)
     func pickerModule(_ moduleInput: PickerModuleInput, didDeselect mediaItem: MediaItem)
     func pickerModuleDidRequestActivate(_ moduleInput: PickerModuleInput)
-    func pickerModuleWantsToOpenFullAccessSettings(_ moduleInput: PickerModuleInput)
     func pickerModuleDidRequestSystemPicker(_ moduleInput: PickerModuleInput)
 }
 

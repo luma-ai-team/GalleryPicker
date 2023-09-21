@@ -1,5 +1,4 @@
 //
-//  LimitedAccessCollectionReusableView.swift
 //  Example
 //
 //  Created by Roi Mulia on 02/12/2020.

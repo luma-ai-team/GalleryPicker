@@ -142,10 +142,6 @@ extension GalleryPickerPresenter: PickerModuleOutput {
     public func pickerModule(_ moduleInput: PickerModuleInput, didDeselect mediaItem: MediaItem) {
         output?.galleryPickerModule(self, didDeselect: mediaItem)
     }
-    
-    public func pickerModuleWantsToOpenFullAccessSettings(_ moduleInput: PickerModuleInput) {
-        galleryCoordinator?.openFullAccessSettings()
-    }
 
     public func pickerModuleDidRequestActivate(_ moduleInput: PickerModuleInput) {
         activate()
