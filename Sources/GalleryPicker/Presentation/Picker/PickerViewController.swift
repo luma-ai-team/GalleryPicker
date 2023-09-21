@@ -143,6 +143,7 @@ public final class PickerViewController: UIViewController {
         let scopeNib = UINib(nibName: "SearchScopeCollectionHeaderCell", bundle: Bundle.module)
         collectionView.register(scopeNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchScopeCollectionHeaderCell.identifier)
 
+        collectionView.register(PickerCollectionViewCell.self, forCellWithReuseIdentifier: "PickerCollectionViewCell")
         output.viewDidLoad()
     }
 
@@ -171,14 +172,14 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
         let oldViewModel = self.viewModel
         self.viewModel = viewModel
 
-        viewModel.cellClass.register(in: collectionView)
+        
 
         var shouldUpdateDataSource: Bool = false
         update(new: viewModel, old: oldViewModel, keyPath: \.fetchResult, force: force) { fetchResult in
             shouldUpdateDataSource = true
         }
 
-        update(new: viewModel, old: oldViewModel, keyPath: \.pickerSelectionStyle, force: force) { _ in
+        update(new: viewModel, old: oldViewModel, keyPath: \.selectionLimit, force: force) { _ in
             shouldUpdateDataSource = true
         }
 
@@ -209,13 +210,12 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
                                 
             dataSource = PickerCollectionDataSource(
                 fetchResult: fetchResult,
-                cellReuseIdentifier: viewModel.cellClass.identifier,
                 shouldPreloadItemMetadata: viewModel.shouldTreatLivePhotosAsVideos,
                 header: shouldDisplayHeader ? header : .none,
                 colorScheme: viewModel.appearance.colorScheme
             )
             
-            dataSource.pickerSelectionStyle = viewModel.pickerSelectionStyle
+            dataSource.selectionLimit = viewModel.selectionLimit
             dataSource.selectedItems = viewModel.selectedItems
             dataSource.output = self
 

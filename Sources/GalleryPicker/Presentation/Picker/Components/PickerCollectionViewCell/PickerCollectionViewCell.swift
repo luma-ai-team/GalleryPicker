@@ -1,18 +1,8 @@
 import UIKit
 import CoreUI
 
-open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, PickerCell {
+open class PickerCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - Static Properties
-
-    public class var identifier: String {
-        return "DefaultPickerCollectionViewCell"
-    }
-
-    public class func register(in collectionView: UICollectionView) {
-        collectionView.register(DefaultPickerCollectionViewCell.self, forCellWithReuseIdentifier: Self.identifier)
-    }
-
     // MARK: - Public Properties
 
     public var item: MediaItem?

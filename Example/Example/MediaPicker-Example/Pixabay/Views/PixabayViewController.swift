@@ -65,7 +65,7 @@ final class PixabayViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.delaysContentTouches = true
-        collectionView.register(AddOnlyPickerCollectionViewCell.self, forCellWithReuseIdentifier: "AddOnlyPickerCollectionViewCell")
+        collectionView.register(PickerCollectionViewCell.self, forCellWithReuseIdentifier: "PickerCollectionViewCell")
         collectionView.keyboardDismissMode = .onDrag
         
         let stackView = UIStackView(arrangedSubviews: [pixabaySearchView, collectionView])
@@ -90,7 +90,7 @@ final class PixabayViewController: UIViewController {
 
 extension PixabayViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddOnlyPickerCollectionViewCell", for: indexPath) as? AddOnlyPickerCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PickerCollectionViewCell", for: indexPath) as? PickerCollectionViewCell else {
             fatalError("Unable to dequeue a CustomCell")
         }
         let pixabayMedia = viewModel.medias[indexPath.item]
@@ -115,7 +115,7 @@ extension PixabayViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let pixabayMedia = viewModel.medias[indexPath.item]
-        let cell = collectionView.cellForItem(at: indexPath) as! PickerCell
+        let cell = collectionView.cellForItem(at: indexPath) as! PickerCollectionViewCell
         output.wantsToSelect(pixabayMedia: pixabayMedia, thumbnail: cell.imageView.image)
     }
 }

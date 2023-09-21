@@ -37,8 +37,7 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
     
     let fetchResult: PHFetchResult<PHAsset>
     let header: Header
-    let cellReuseIdentifier: String
-    var pickerSelectionStyle: PickerSelectionStyle = .selection(limit: 1)
+    var selectionLimit = 1
     var shouldPreloadMetadata: Bool
     var colorScheme: ColorScheme
     var items: [IndexPath: MediaItem] = [:]
@@ -48,14 +47,12 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
     private let assetCount: Int
     
     init(fetchResult: PHFetchResult<PHAsset>,
-         cellReuseIdentifier: String = DefaultPickerCollectionViewCell.identifier,
          shouldPreloadItemMetadata: Bool,
          header: Header,
          colorScheme: ColorScheme) {
         self.colorScheme = colorScheme
         self.header = header
         self.fetchResult = fetchResult
-        self.cellReuseIdentifier = cellReuseIdentifier
         self.shouldPreloadMetadata = shouldPreloadItemMetadata
         assetCount = fetchResult.count
     }
@@ -69,8 +66,8 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier,
-                                                            for: indexPath) as? PickerCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PickerCollectionViewCell",
+                                                            for: indexPath) as? PickerCollectionViewCell else {
             return .init()
         }
 
@@ -104,7 +101,7 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
                 return cell.reloadThumbnail()
             }
 
-            for case let cell as PickerCell in collectionView.visibleCells where cell.item?.identifier == item.identifier {
+            for case let cell as PickerCollectionViewCell in collectionView.visibleCells where cell.item?.identifier == item.identifier {
                 return cell.reloadThumbnail()
             }
         }
@@ -118,31 +115,26 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         }
 
         mediaItem.updateAssetMetadata()
-                
-        switch pickerSelectionStyle {
-        case .selection(let limit, _):
-            if let index = selectedItems.firstIndex(of: mediaItem) {
-                selectedItems.remove(at: index)
-                output?.collectionView(collectionView, didDeselect: mediaItem)
-            }
-            else if selectedItems.count < limit {
-                selectedItems.append(mediaItem)
-                output?.collectionView(collectionView, didSelect: mediaItem)
-            }
-
-        case .addOnly(let limit,  _):
-             if selectedItems.count < limit {
-                selectedItems.append(mediaItem)
-                output?.collectionView(collectionView, didSelect: mediaItem)
-            }
+        let limit = selectionLimit
+        
+        if let index = selectedItems.firstIndex(of: mediaItem) {
+            selectedItems.remove(at: index)
+            output?.collectionView(collectionView, didDeselect: mediaItem)
+        }
+        else if selectedItems.count < limit {
+            selectedItems.append(mediaItem)
+            output?.collectionView(collectionView, didSelect: mediaItem)
         }
         
-        if let cell = collectionView.cellForItem(at: indexPath) as? PickerCell {
+     
+        #warning("TODO: Fix bug where items numeric count are not updating on deselect")
+        if let cell = collectionView.cellForItem(at: indexPath) as? PickerCollectionViewCell {
             let selectedCount = selectedItems.filter { $0 == mediaItem }.count
             let representativeIndex = selectedItems.firstIndex(where: {$0 == mediaItem})
             cell.configure(with: mediaItem, selectCount: selectedCount, representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: shouldPreloadMetadata)
             cell.bounceAnimation()
         }
+
     }
 
     func collectionView(_ collectionView: UICollectionView,

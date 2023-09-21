@@ -93,7 +93,7 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
      
         guard indexPath.section == 1 else {
             let cell = tableView.dequeueReusableCell(withIdentifier: DrawerTableVieWCell.identifier, for: indexPath) as? DrawerTableVieWCell
-            cell?.drawerView.backgroundColor = viewModel.albumsAppearance.colorScheme.title
+            cell?.drawerView.backgroundColor = viewModel.colorScheme.title
             cell?.selectionStyle = .none
             cell?.layoutIfNeeded()
             return cell ?? .init()
@@ -104,7 +104,7 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         let album = viewModel.albums[indexPath.row]
-        cell.configure(with: album, and: viewModel.albumsAppearance)
+        cell.configure(with: album, colorScheme: viewModel.colorScheme)
         cell.selectionStyle = .none
         
         GalleryAssetService.shared.fetchThumbnail(for: album,
@@ -115,7 +115,7 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
                 return
             }
 
-            cell.configure(with: album, and: self.viewModel.albumsAppearance)
+            cell.configure(with: album, colorScheme: viewModel.colorScheme)
         }
 
         return cell
@@ -132,7 +132,7 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             return 27
         }
-        return viewModel.albumsAppearance.cellHeight
+        return 100
     }
 }
 
@@ -143,7 +143,7 @@ extension AlbumsViewController: AlbumsViewInput, ForceViewUpdate {
     func update(with viewModel: AlbumsViewModel, force: Bool, animated: Bool) {
         self.viewModel = viewModel
 
-        view.backgroundColor = viewModel.albumsAppearance.colorScheme.foreground
+        view.backgroundColor = viewModel.colorScheme.foreground
         tableView.reloadData()
     }
 }

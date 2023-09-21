@@ -19,7 +19,7 @@ class GalleryPickerModuleBuilder {
         
         let configuration = galleryPickerService.createGalleryPickerConfiguration()
         configuration.filter.shouldTreatLivePhotosAsVideos = true
-        configuration.pickerConfiguration.pickerSelectionStyle = .selection(limit: 15)
+        configuration.pickerConfiguration.selectionLimit = 15
         configuration.appearance.navigationBarStyle = .init(style: .solidColor(Constants.colorScheme.background), isStatusBarHidden: false, statusBarStyle: .darkContent)
         configuration.filter.supportedMediaTypes = .all
         configuration.pickerConfiguration.categories = [

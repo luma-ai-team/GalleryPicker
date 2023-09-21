@@ -47,7 +47,7 @@ final class GalleryCoordinator: BaseCoordinator<UINavigationController> {
     func pickerModuleDidRequestSystemPicker(_ moduleInput: GalleryPickerModuleInput) {
         let state = moduleInput.state
         var pickerConfiguration = PHPickerConfiguration()
-        pickerConfiguration.selectionLimit = state.galleryPickerConfiguration.pickerConfiguration.pickerSelectionStyle.limit
+        pickerConfiguration.selectionLimit = state.galleryPickerConfiguration.pickerConfiguration.selectionLimit
         
         switch state.galleryPickerConfiguration.filter.supportedMediaTypes {
         case .all:

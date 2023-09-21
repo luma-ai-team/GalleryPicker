@@ -17,9 +17,8 @@ final class AlbumsTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var countLabel: UILabel!
     
-    func configure(with album: Album, and appearance: AlbumsAppearance) {
+    func configure(with album: Album, colorScheme: ColorScheme) {
         self.album = album
-        let colorScheme = appearance.colorScheme
         thumbnailImageView.image = album.thumbnail
         titleLabel.text = album.title
         countLabel.text = "\(album.estimatedAssetCount)"

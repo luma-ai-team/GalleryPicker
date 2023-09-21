@@ -13,15 +13,11 @@ import CoreUI
 
 public class PickerConfiguration {
    
-    public var pickerSelectionStyle: PickerSelectionStyle = .selection(limit: 1)
+    public var selectionLimit = 1
     public var enableSystemGallery: Bool = true
     public var categories: [MediaItemCategory] = []
     var filter: MediaItemFilter = .init()
 
-    public var cellClass: PickerCell.Type {
-        pickerSelectionStyle.cellClass
-    }
-    
     public var appearance: PickerAppearance
    
 
