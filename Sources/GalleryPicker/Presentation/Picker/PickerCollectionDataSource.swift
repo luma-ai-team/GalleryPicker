@@ -11,7 +11,6 @@ import CoreUI
 
 protocol PickerCollectionDataSourceOutput: AnyObject {
     func collectionView(_ collectionView: UICollectionView, didSelect mediaItem: MediaItem)
-    func collectionView(didSelect category: MediaItemCategory)
     func collectionView(_ collectionView: UICollectionView, didDeselect mediaItem: MediaItem)
 }
 
@@ -19,15 +18,12 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
     
     enum Header {
         case limitedAcces(ColorScheme)
-        case searchScope([MediaItemCategory], ColorScheme)
         case none
         
         var identifier: String {
             switch self {
             case .limitedAcces:
                 return "OpenSettingsHeaderCell"
-            case .searchScope:
-                return SearchScopeCollectionHeaderCell.identifier
             case .none:
                 return ""
             }
@@ -157,15 +153,6 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
             headerView?.applyColor(colorScheme: colorScheme)
             headerView?.backgroundColor = colorScheme.background
             myHeaderView = headerView ?? .init()
-        case .searchScope(let categories, let colorScheme):
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: header.identifier, for: indexPath) as? SearchScopeCollectionHeaderCell
-            headerView?.categoryPickerCollectionView.items = categories.map { (category: MediaItemCategory) -> CategoryItem in
-                return .init(category: category, colorScheme: colorScheme)
-            }
-            headerView?.output = self
-            headerView?.backgroundColor = colorScheme.background
-            myHeaderView = headerView ?? .init()
-            
         }
         
         return myHeaderView
@@ -179,8 +166,6 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
             return .zero
         case .limitedAcces:
             return .init(width: collectionView.bounds.width, height: 75)
-        case .searchScope:
-            return .init(width: collectionView.bounds.width, height: 48)
         }
     }
 }
@@ -235,15 +220,5 @@ extension PickerCollectionDataSource {
         }
     }
 }
-
-
-// MARK: - SearchScopeCollectionHeaderCellOutput
-
-extension PickerCollectionDataSource: SearchScopeCollectionHeaderCellOutput {
-    func searchScopeCollectionHeaderCell(_ searchScopeCollectionHeaderCell: SearchScopeCollectionHeaderCell, didSelect category: MediaItemCategory) {
-        output?.collectionView(didSelect: category)
-    }
-}
-
 
 

@@ -15,7 +15,6 @@ public class PickerConfiguration {
    
     public var selectionLimit = 1
     public var enableSystemGallery: Bool = true
-    public var categories: [MediaItemCategory] = []
     var filter: MediaItemFilter = .init()
 
     public var appearance: PickerAppearance

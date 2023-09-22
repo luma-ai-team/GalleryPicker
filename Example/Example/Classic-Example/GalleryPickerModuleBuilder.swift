@@ -22,11 +22,7 @@ class GalleryPickerModuleBuilder {
         configuration.pickerConfiguration.selectionLimit = 15
         configuration.appearance.navigationBarStyle = .init(style: .solidColor(Constants.colorScheme.background), isStatusBarHidden: false, statusBarStyle: .darkContent)
         configuration.filter.supportedMediaTypes = .all
-        configuration.pickerConfiguration.categories = [
-            .init(title: "All", predicate: nil),
-            .init(title: "Videos", predicate: .init(format: "mediaType = %d", PHAssetMediaType.video.rawValue)),
-            .init(title: "Live Photos", predicate: .init(format: "mediaSubtype = %d", PHAssetMediaSubtype.photoLive.rawValue)),
-        ]
+    
         
         let settingsButton = BounceButton(type: .custom)
         let settingsImage = UIImage(named: "settings")

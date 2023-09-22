@@ -19,8 +19,6 @@ protocol PickerViewOutput: AnyObject {
 
     func mediaItemSelectionEventTriggered(mediaItem: MediaItem)
     func mediaItemDeselectionEventTriggered(mediaItem: MediaItem)
-
-    func categorySelectionEventTriggered(category: MediaItemCategory)
 }
 
 public final class PickerViewController: UIViewController {
@@ -137,10 +135,6 @@ public final class PickerViewController: UIViewController {
         view.sendSubviewToBack(noMediaView)
             
         collectionView.register(LimitedHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LimitedHeaderCell")
-        
-        
-        let scopeNib = UINib(nibName: "SearchScopeCollectionHeaderCell", bundle: Bundle.module)
-        collectionView.register(scopeNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchScopeCollectionHeaderCell.identifier)
 
         collectionView.register(PickerCollectionViewCell.self, forCellWithReuseIdentifier: "PickerCollectionViewCell")
         output.viewDidLoad()
@@ -182,11 +176,6 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
             shouldUpdateDataSource = true
         }
 
-
-        update(new: viewModel, old: oldViewModel, keyPath: \.categories, force: false) { (categories: [MediaItemCategory]) in
-            shouldUpdateDataSource = true
-        }
-
         update(new: viewModel, old: oldViewModel, keyPath: \.noMedia, force: force) { noMedia in
             noMediaView.alpha = noMedia ? 1 : 0
             shouldUpdateDataSource = true
@@ -206,7 +195,7 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
                 case .limited:
                     return .limitedAcces(viewModel.appearance.colorScheme)
                 case .authorized:
-                    return viewModel.categories.isEmpty ? .none : .searchScope(viewModel.categories, viewModel.appearance.colorScheme)
+                    return .none
                 default:
                     return .none
                 }
@@ -270,12 +259,6 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
 
 extension PickerViewController: PickerCollectionDataSourceOutput {
  
-    func collectionView(didSelect category: MediaItemCategory) {
-        Haptic.selection.generate()
-        collectionView.contentOffset.y = 0
-        output.categorySelectionEventTriggered(category: category)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelect mediaItem: MediaItem) {
         Haptic.selection.generate()
         output.mediaItemSelectionEventTriggered(mediaItem: mediaItem)

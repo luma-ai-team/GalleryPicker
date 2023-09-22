@@ -11,7 +11,6 @@ final class PickerViewModel {
     var selectedItems: [MediaItem]
     let permissionStatus: PHAuthorizationStatus
     let enableSystemGallery: Bool
-    let categories: [MediaItemCategory]
     let selectionLimit: Int
     let shouldTreatLivePhotosAsVideos: Bool
     let noMedia: Bool
@@ -22,9 +21,6 @@ final class PickerViewModel {
         fetchResult = state.mediaItemFetchResult?.fetchResult
         selectedItems = state.selectedItems
         permissionStatus = state.permissionStatus
-
-        
-        categories = state.pickerConfiguration.categories
 
         selectionLimit = state.pickerConfiguration.selectionLimit
         

@@ -42,11 +42,6 @@ extension PickerPresenter: PickerViewOutput {
         output?.pickerModule(self, didDeselect: mediaItem)
     }
 
-    func categorySelectionEventTriggered(category: MediaItemCategory) {
-        state.selectedCategory = category
-        fetchContent()
-        update(force: false, animated: true)
-    }
     
     func viewDidLoad() {
         update(force: true, animated: false)
@@ -78,7 +73,6 @@ extension PickerPresenter: PickerViewOutput {
 
     private func fetchPhotos(in album: Album) {
         let filter = state.pickerConfiguration.filter
-        filter.auxiliaryPredicate = state.selectedCategory?.predicate
         GalleryAssetService.shared.fetchMediaItemList(in: album,
                                                       filter: filter) { [weak self] (result: MediaItemFetchResult) in
             guard let self = self else {
