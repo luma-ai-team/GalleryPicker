@@ -7,8 +7,8 @@
 
 import UIKit
 
-extension UIView {
-    func bounceAnimation(duration: TimeInterval = 0.2, scale: CGFloat = 0.94) {
+public extension UICollectionViewCell {
+    func bounceCellAnimation(duration: TimeInterval = 0.2, scale: CGFloat = 0.94) {
         // Scale up
         UIView.animate(withDuration: duration / 2,
                        delay: 0,
