@@ -30,6 +30,7 @@ extension PickerPresenter: PickerViewOutput {
     
     func mediaItemSelectionEventTriggered(mediaItem: MediaItem) {
         state.selectedItems.append(mediaItem)
+        update(force: false, animated: false)
         output?.pickerModule(self, didSelect: mediaItem)
     }
 
@@ -37,7 +38,7 @@ extension PickerPresenter: PickerViewOutput {
         if let index = state.selectedItems.firstIndex(of: mediaItem) {
             state.selectedItems.remove(at: index)
         }
-        
+        update(force: false, animated: false)
         output?.pickerModule(self, didDeselect: mediaItem)
     }
 

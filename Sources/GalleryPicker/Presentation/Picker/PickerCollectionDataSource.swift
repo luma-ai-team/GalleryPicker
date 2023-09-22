@@ -112,28 +112,22 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         guard let mediaItem = items[indexPath] else {
             return
         }
-
+        
         mediaItem.updateAssetMetadata()
         let limit = selectionLimit
         
-        if let index = selectedItems.firstIndex(of: mediaItem) {
-            selectedItems.remove(at: index)
+        if selectedItems.contains(mediaItem) {
             output?.collectionView(collectionView, didDeselect: mediaItem)
         }
         else if selectedItems.count < limit {
-            selectedItems.append(mediaItem)
             output?.collectionView(collectionView, didSelect: mediaItem)
         }
         
-     
-        #warning("TODO: Fix bug where items numeric count are not updating on deselect")
-        if let cell = collectionView.cellForItem(at: indexPath) as? PickerCollectionViewCell {
-            let selectedCount = selectedItems.filter { $0 == mediaItem }.count
-            let representativeIndex = selectedItems.firstIndex(where: {$0 == mediaItem})
-            cell.configure(with: mediaItem, selectCount: selectedCount, representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: shouldPreloadMetadata)
-            cell.bounceAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0166666667) {
+            if let cell = collectionView.cellForItem(at: indexPath) as? PickerCollectionViewCell {
+                cell.bounceAnimation()
+            }
         }
-
     }
 
     func collectionView(_ collectionView: UICollectionView,

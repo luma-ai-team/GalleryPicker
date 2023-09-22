@@ -192,6 +192,11 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
             shouldUpdateDataSource = true
         }
         
+        
+        update(new: viewModel, old: oldViewModel, keyPath: \.selectedItems, force: force) { _ in
+            shouldUpdateDataSource = true
+        }
+        
         if shouldUpdateDataSource {
             let fetchResult = viewModel.fetchResult ?? .init()
             let shouldAnimateCollectionUpdate = (fetchResult.count != 0) && (didPerformInitialAnimation == false)
@@ -273,12 +278,11 @@ extension PickerViewController: PickerCollectionDataSourceOutput {
     
     func collectionView(_ collectionView: UICollectionView, didSelect mediaItem: MediaItem) {
         Haptic.selection.generate()
-        viewModel.selectedItems = dataSource.selectedItems
         output.mediaItemSelectionEventTriggered(mediaItem: mediaItem)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselect mediaItem: MediaItem) {
-        viewModel.selectedItems = dataSource.selectedItems
+        Haptic.selection.generate()
         output.mediaItemDeselectionEventTriggered(mediaItem: mediaItem)
     }
 }
