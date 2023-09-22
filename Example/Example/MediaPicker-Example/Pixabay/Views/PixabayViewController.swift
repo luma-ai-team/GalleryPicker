@@ -96,9 +96,8 @@ extension PixabayViewController: UICollectionViewDataSource, UICollectionViewDel
         let pixabayMedia = viewModel.medias[indexPath.item]
         let pixabayMediaItem = PixabayMediaItem(with: pixabayMedia, thumbnail: nil)
                 
-        let selectItemsCount = viewModel.selectedItems.filter { $0.identifier == String(pixabayMedia.id) }.count
         let representativeIndex = viewModel.selectedItems.firstIndex(where: {$0.identifier == String(pixabayMedia.id)})
-        cell.configure(with: pixabayMediaItem, selectCount: selectItemsCount,  representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: false)
+        cell.configure(with: pixabayMediaItem,  representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: false)
 
         cell.contentView.backgroundColor = Constants.colorScheme.foreground
         

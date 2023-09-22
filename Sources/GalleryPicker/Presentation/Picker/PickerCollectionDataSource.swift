@@ -120,7 +120,7 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.0166666667) {
             if let cell = collectionView.cellForItem(at: indexPath) as? PickerCollectionViewCell {
-                cell.bounceAnimation()
+                cell.bounceCellAnimation()
             }
         }
     }
