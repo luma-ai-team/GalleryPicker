@@ -141,7 +141,7 @@ open class PickerCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Configuration
 
-    public func configure(with item: MediaItem, selectCount: Int, representativeIndex: Int? ,  shouldDisplayLivePhotoBage: Bool) {
+    public func configure(with item: MediaItem, representativeIndex: Int? ,  shouldDisplayLivePhotoBage: Bool) {
         self.item = item
         imageView.image = item.thumbnail
         
@@ -155,17 +155,23 @@ open class PickerCollectionViewCell: UICollectionViewCell {
             durationLabel.isHidden = true
         }
         
-        selectionLabel.text = "\((representativeIndex ?? 0) + 1)"
-        
-        let isSelected = selectCount > 0
         selectionView.backgroundColor = colorScheme?.background.withAlphaComponent(0.4)
-        selectionView.alpha = isSelected ? 1 : 0
-        selectionLabel.alpha = selectionView.alpha
-        
-        contentView.layer.borderWidth = isSelected ? 3 : 0
         contentView.layer.borderColor = colorScheme?.title.cgColor
         selectionLabel.textColor = colorScheme?.background
         selectionLabel.backgroundColor = colorScheme?.title
+        
+        if let representativeIndex = representativeIndex {
+            selectionLabel.text = "\((representativeIndex) + 1)"
+            selectionView.alpha = 1
+            selectionLabel.alpha = 1
+            contentView.layer.borderWidth = 3
+        } else {
+            selectionLabel.text = ""
+            selectionView.alpha = 0
+            selectionLabel.alpha = 0
+            contentView.layer.borderWidth = 0
+        }
+        
     }
     
     public func reloadThumbnail() {

@@ -87,9 +87,8 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         let baseSize = self.collectionView(collectionView, layout: collectionView.collectionViewLayout, sizeForItemAt: indexPath)
         let scaledSize = baseSize.applying(.init(scaleX: scale, y: scale))
      
-        let selectCount = selectedItems.filter { $0 == item }.count
         let representativeIndex = selectedItems.firstIndex(where: {$0 == item})
-        cell.configure(with: item, selectCount: selectCount, representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: shouldPreloadMetadata)
+        cell.configure(with: item, representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: shouldPreloadMetadata)
         
         GalleryAssetService.shared.fetchThumbnail(for: item, size: scaledSize) { (image: UIImage?) in
             if item.identifier == cell.item?.identifier {
