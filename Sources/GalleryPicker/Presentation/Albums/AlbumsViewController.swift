@@ -23,14 +23,20 @@ public final class AlbumsViewController: UIViewController {
     private let output: AlbumsViewOutput
 
     lazy var tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.sectionHeaderHeight = 0.0
+        tableView.sectionFooterHeight = 0.0
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
         tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
         return tableView
     }()
     
@@ -88,6 +94,7 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.drawerImageView.tintColor = viewModel.colorScheme.title
             cell?.selectionStyle = .none
             cell?.layoutIfNeeded()
+            cell?.backgroundColor = .clear
             return cell ?? .init()
         }
         
@@ -132,7 +139,7 @@ extension AlbumsViewController: AlbumsViewInput, ForceViewUpdate {
     func update(with viewModel: AlbumsViewModel, force: Bool, animated: Bool) {
         self.viewModel = viewModel
 
-        view.backgroundColor = viewModel.colorScheme.foreground
+        view.backgroundColor = viewModel.colorScheme.background
         tableView.reloadData()
     }
 }

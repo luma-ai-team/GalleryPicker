@@ -35,11 +35,8 @@ class AlbumCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        contentView.backgroundColor = .clear
-        backgroundColor = .clear
+    
         contentView.addSubview(albumImageView)
-        
         
         let stackView = UIStackView(arrangedSubviews: [albumNameLabel, AlbumAssetsCountLabel])
         stackView.axis = .vertical
@@ -50,8 +47,8 @@ class AlbumCell: UITableViewCell {
         
         contentView.addSubview(stackView)
         NSLayoutConstraint.activate([
-            albumImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
-            albumImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
+            albumImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            albumImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             albumImageView.widthAnchor.constraint(equalTo: albumImageView.heightAnchor),
             albumImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             
@@ -72,5 +69,8 @@ class AlbumCell: UITableViewCell {
         albumNameLabel.textColor = colorScheme.title
         AlbumAssetsCountLabel.textColor = colorScheme.subtitle
         albumImageView.backgroundColor = colorScheme.background
+        contentView.backgroundColor = colorScheme.foreground
+        albumImageView.clipsToBounds = true
+        albumImageView.roundCorners(to: .custom(10))
     }
 }
