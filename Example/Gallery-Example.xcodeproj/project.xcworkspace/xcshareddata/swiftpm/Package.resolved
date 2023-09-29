@@ -6,7 +6,7 @@
       "location" : "https://github.com/luma-ai-team/CoreUI",
       "state" : {
         "branch" : "master",
-        "revision" : "abccb98b43c34ffb50b466057580e5fa014ccad0"
+        "revision" : "0042554095b8205de7b1b691fc4bfc377a1e271e"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImage.git",
       "state" : {
-        "revision" : "6e844d19679c9e0833ccc363d7f5a7c5f0c5f5d7",
-        "version" : "5.18.1"
+        "revision" : "936f1c7067728d16c362ba4fb93c17df78b5fd79",
+        "version" : "5.18.2"
       }
     }
   ],

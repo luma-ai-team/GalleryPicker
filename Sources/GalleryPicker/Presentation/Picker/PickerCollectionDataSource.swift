@@ -182,7 +182,7 @@ extension PickerCollectionDataSource {
         
         mediaItem.updateAssetMetadata()
         let previewProvider: UIContextMenuContentPreviewProvider = { () -> UIViewController? in
-            return PeekPreviewViewController(with: .mediaItem(mediaItem))
+            return PeekViewController(with: .mediaItem(mediaItem))
         }
         
         let actionProvider: UIContextMenuActionProvider = { _ -> UIMenu? in

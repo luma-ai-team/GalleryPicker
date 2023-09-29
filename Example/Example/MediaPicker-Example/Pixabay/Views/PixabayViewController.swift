@@ -127,7 +127,7 @@ extension PixabayViewController {
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
         let pixabayMedia = viewModel.medias[indexPath.item]
-        let vc: PeekPreviewViewController?
+        let vc: PeekViewController?
         let ratio = pixabayMedia.size.width / pixabayMedia.size.height
         switch pixabayMedia {
         case .image:

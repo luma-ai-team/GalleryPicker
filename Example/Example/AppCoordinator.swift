@@ -24,6 +24,10 @@ final class AppCoordinator: BaseCoordinator<UIViewController> {
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
         UIApplication.shared.isIdleTimerDisabled = true
+        
+        DispatchQueue.main.async {
+            self.didSelectPixabayGalleryPicker()
+        }
     }
 }
 

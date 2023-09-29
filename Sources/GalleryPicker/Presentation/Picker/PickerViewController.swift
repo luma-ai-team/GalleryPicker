@@ -75,14 +75,14 @@ public final class PickerViewController: UIViewController {
         return contaienrView
     }()
 
-    private lazy var noMediaView: NoMediaView = {
-        let noMediaView: NoMediaView = UIView.fromNib(bundle: .module)
-        noMediaView.setTint(tintColor: viewModel.appearance.colorScheme.title)
+    private lazy var noMediaView: NoMediaFoundView = {
+        let noMediaView = NoMediaFoundView()
+        noMediaView.setTintColor(tintColor: viewModel.appearance.colorScheme.title)
         view.addSubview(noMediaView)
         noMediaView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             noMediaView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            noMediaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 90)
+            noMediaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70)
         ])
         return noMediaView
     }()
