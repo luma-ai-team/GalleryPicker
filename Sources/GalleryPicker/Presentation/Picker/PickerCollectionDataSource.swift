@@ -128,11 +128,11 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let layout = collectionView.collectionViewLayout as? GalleryPickerCollectionViewFlowLayout else {
+        guard let layout = collectionView.collectionViewLayout as? GalleryPickerFlowLayout else {
             return .zero
         }
         
-        return layout.cellSize(in: collectionView)
+        return layout.getCellSize(for: collectionView)
     }
     
     func collectionView(_ collectionView: UICollectionView,

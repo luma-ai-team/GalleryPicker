@@ -30,7 +30,7 @@ public class PickerConfiguration {
 
 
 open class PickerAppearance {
-    public var cellLayout = GalleryPickerCollectionViewFlowLayout()
+    public var cellLayout = GalleryPickerFlowLayout()
     public var colorScheme: ColorScheme
     public init(colorSceme: ColorScheme) {
         self.colorScheme = colorSceme

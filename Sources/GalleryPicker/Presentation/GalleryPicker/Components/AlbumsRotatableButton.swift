@@ -13,7 +13,8 @@ public class AlbumsRotatableButton: BounceButton {
 
     
     private let arrowView = UIImageView()
-
+    private let spacing: CGFloat = 0.0
+    
     public var isAlbumPresented = false {
         didSet {
             UIView.animate(withDuration: 0.2) {
@@ -44,8 +45,8 @@ public class AlbumsRotatableButton: BounceButton {
     private func setup() {
         contentHorizontalAlignment = .left
         addSubview(arrowView)
-        arrowView.image = UIImage(systemName: "chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .bold))
-        titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        arrowView.image = UIImage(systemName: "chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
+        titleLabel?.font = UIFont.roundedFont(size: 22, weight: .semibold)
     }
     
     func updateAppearanceWithColorScheme(colorScheme: ColorScheme) {
@@ -65,14 +66,14 @@ public class AlbumsRotatableButton: BounceButton {
         
         arrowView.sizeToFit()
         arrowView.center.y = bounds.height / 2 + 1
-        arrowView.frame.origin.x = (titleLabel?.frame.maxX ?? 0) + 2
+        arrowView.frame.origin.x = (titleLabel?.frame.maxX ?? 0) + spacing
     }
     
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         var originalSize = super.sizeThatFits(size)
         
         arrowView.sizeToFit()
-        originalSize.width += arrowView.bounds.width + 3.0
+        originalSize.width += arrowView.bounds.width + spacing
         return originalSize
     }
 }
