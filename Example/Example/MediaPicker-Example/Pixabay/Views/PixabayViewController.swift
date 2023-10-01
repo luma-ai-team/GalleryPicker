@@ -65,7 +65,7 @@ final class PixabayViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.delaysContentTouches = true
-        collectionView.register(AddOnlyPickerCollectionViewCell.self, forCellWithReuseIdentifier: "AddOnlyPickerCollectionViewCell")
+        collectionView.register(PickerCollectionViewCell.self, forCellWithReuseIdentifier: "PickerCollectionViewCell")
         collectionView.keyboardDismissMode = .onDrag
         
         let stackView = UIStackView(arrangedSubviews: [pixabaySearchView, collectionView])
@@ -90,14 +90,14 @@ final class PixabayViewController: UIViewController {
 
 extension PixabayViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddOnlyPickerCollectionViewCell", for: indexPath) as? AddOnlyPickerCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PickerCollectionViewCell", for: indexPath) as? PickerCollectionViewCell else {
             fatalError("Unable to dequeue a CustomCell")
         }
         let pixabayMedia = viewModel.medias[indexPath.item]
         let pixabayMediaItem = PixabayMediaItem(with: pixabayMedia, thumbnail: nil)
                 
-        let selectItemsCount = viewModel.selectedItems.filter { $0.identifier == String(pixabayMedia.id) }.count
-        cell.configure(with: pixabayMediaItem, selectCount: selectItemsCount, shouldDisplayLivePhotoBage: false)
+        let representativeIndex = viewModel.selectedItems.firstIndex(where: {$0.identifier == String(pixabayMedia.id)})
+        cell.configure(with: pixabayMediaItem,  representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: false)
 
         cell.contentView.backgroundColor = Constants.colorScheme.foreground
         
@@ -114,7 +114,7 @@ extension PixabayViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let pixabayMedia = viewModel.medias[indexPath.item]
-        let cell = collectionView.cellForItem(at: indexPath) as! PickerCell
+        let cell = collectionView.cellForItem(at: indexPath) as! PickerCollectionViewCell
         output.wantsToSelect(pixabayMedia: pixabayMedia, thumbnail: cell.imageView.image)
     }
 }
@@ -127,7 +127,7 @@ extension PixabayViewController {
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
         let pixabayMedia = viewModel.medias[indexPath.item]
-        let vc: PeekPreviewViewController?
+        let vc: PeekViewController?
         let ratio = pixabayMedia.size.width / pixabayMedia.size.height
         switch pixabayMedia {
         case .image:

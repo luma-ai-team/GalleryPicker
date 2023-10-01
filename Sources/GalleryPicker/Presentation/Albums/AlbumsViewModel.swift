@@ -3,15 +3,16 @@
 //
 
 import UIKit
+import CoreUI
 
 final class AlbumsViewModel {
     let albums: [Album]
     let filter: MediaItemFilter
-    let albumsAppearance: AlbumsAppearance
+    let colorScheme: ColorScheme
 
     init(state: AlbumsState) {
         albums = state.albums
         filter = state.configuration.filter
-        albumsAppearance = state.configuration.appearance
+        colorScheme = state.configuration.colorScheme
     }
 }

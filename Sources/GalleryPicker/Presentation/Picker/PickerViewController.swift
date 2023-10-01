@@ -14,14 +14,11 @@ protocol PickerViewInput: AnyObject {
 protocol PickerViewOutput: AnyObject {
     func viewDidLoad()
 
-    func fullAccessRequestEventTriggered()
     func activationRequestEventTriggered()
     func systemPickerEventTriggered()
 
     func mediaItemSelectionEventTriggered(mediaItem: MediaItem)
     func mediaItemDeselectionEventTriggered(mediaItem: MediaItem)
-
-    func categorySelectionEventTriggered(category: MediaItemCategory)
 }
 
 public final class PickerViewController: UIViewController {
@@ -30,9 +27,9 @@ public final class PickerViewController: UIViewController {
     private let output: PickerViewOutput
     private var didPerformInitialAnimation: Bool = false
 
-    private lazy var deniedRequestPermissionView: PermissionsPlaceholderView = {
-        let view = NoPermissionsView.create(with: viewModel.appearance.colorScheme)
-        view.delegate = self
+    private lazy var enablePermissionView: EnablePermissionView = {
+        let view = EnablePermissionView()
+        view.applyColor(colorScheme: viewModel.appearance.colorScheme)
         view.alpha = 0
         return view
     }()
@@ -78,14 +75,14 @@ public final class PickerViewController: UIViewController {
         return contaienrView
     }()
 
-    private lazy var noMediaView: NoMediaView = {
-        let noMediaView: NoMediaView = UIView.fromNib(bundle: .module)
-        noMediaView.setTint(tintColor: viewModel.appearance.colorScheme.title)
+    private lazy var noMediaView: NoMediaFoundView = {
+        let noMediaView = NoMediaFoundView()
+        noMediaView.setTintColor(tintColor: viewModel.appearance.colorScheme.title)
         view.addSubview(noMediaView)
         noMediaView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             noMediaView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            noMediaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 90)
+            noMediaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70)
         ])
         return noMediaView
     }()
@@ -133,16 +130,13 @@ public final class PickerViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        view.addSubview(deniedRequestPermissionView)
+        view.addSubview(enablePermissionView)
         view.addSubview(noMediaView)
         view.sendSubviewToBack(noMediaView)
-        
-        let limitedNib = UINib(nibName: "LimitedAccessCollectionHeaderCell", bundle: Bundle.module)
-        collectionView.register(limitedNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: LimitedAccessCollectionHeaderCell.identifier)
-        
-        let scopeNib = UINib(nibName: "SearchScopeCollectionHeaderCell", bundle: Bundle.module)
-        collectionView.register(scopeNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchScopeCollectionHeaderCell.identifier)
+            
+        collectionView.register(LimitedHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "LimitedHeaderCell")
 
+        collectionView.register(PickerCollectionViewCell.self, forCellWithReuseIdentifier: "PickerCollectionViewCell")
         output.viewDidLoad()
     }
 
@@ -153,7 +147,7 @@ public final class PickerViewController: UIViewController {
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        deniedRequestPermissionView.frame = view.bounds
+        enablePermissionView.frame = view.bounds
         view.bringSubviewToFront(openGalleryContainerView)
     }
     
@@ -171,24 +165,24 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
         let oldViewModel = self.viewModel
         self.viewModel = viewModel
 
-        viewModel.cellClass.register(in: collectionView)
+        
 
         var shouldUpdateDataSource: Bool = false
         update(new: viewModel, old: oldViewModel, keyPath: \.fetchResult, force: force) { fetchResult in
             shouldUpdateDataSource = true
         }
 
-        update(new: viewModel, old: oldViewModel, keyPath: \.pickerSelectionStyle, force: force) { _ in
-            shouldUpdateDataSource = true
-        }
-
-
-        update(new: viewModel, old: oldViewModel, keyPath: \.categories, force: false) { (categories: [MediaItemCategory]) in
+        update(new: viewModel, old: oldViewModel, keyPath: \.selectionLimit, force: force) { _ in
             shouldUpdateDataSource = true
         }
 
         update(new: viewModel, old: oldViewModel, keyPath: \.noMedia, force: force) { noMedia in
             noMediaView.alpha = noMedia ? 1 : 0
+            shouldUpdateDataSource = true
+        }
+        
+        
+        update(new: viewModel, old: oldViewModel, keyPath: \.selectedItems, force: force) { _ in
             shouldUpdateDataSource = true
         }
         
@@ -201,7 +195,7 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
                 case .limited:
                     return .limitedAcces(viewModel.appearance.colorScheme)
                 case .authorized:
-                    return viewModel.categories.isEmpty ? .none : .searchScope(viewModel.categories, viewModel.appearance.colorScheme)
+                    return .none
                 default:
                     return .none
                 }
@@ -209,13 +203,12 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
                                 
             dataSource = PickerCollectionDataSource(
                 fetchResult: fetchResult,
-                cellReuseIdentifier: viewModel.cellClass.identifier,
                 shouldPreloadItemMetadata: viewModel.shouldTreatLivePhotosAsVideos,
                 header: shouldDisplayHeader ? header : .none,
                 colorScheme: viewModel.appearance.colorScheme
             )
             
-            dataSource.pickerSelectionStyle = viewModel.pickerSelectionStyle
+            dataSource.selectionLimit = viewModel.selectionLimit
             dataSource.selectedItems = viewModel.selectedItems
             dataSource.output = self
 
@@ -242,13 +235,13 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
         update(new: viewModel, old: oldViewModel, keyPath: \.permissionStatus, force: force) { (status) in
             switch status {
             case .denied, .restricted:
-                deniedRequestPermissionView.alpha = 1
+                enablePermissionView.alpha = 1
                 openGalleryContainerView.alpha = 1
             case .limited:
-                deniedRequestPermissionView.alpha = 0
+                enablePermissionView.alpha = 0
                 openGalleryContainerView.alpha = 1
             case .authorized, .notDetermined:
-                deniedRequestPermissionView.alpha = 0
+                enablePermissionView.alpha = 0
                 openGalleryContainerView.alpha = 0
             @unknown default:
                 break
@@ -266,37 +259,13 @@ extension PickerViewController: PickerViewInput, ForceViewUpdate {
 
 extension PickerViewController: PickerCollectionDataSourceOutput {
  
-    func collectionView(didSelect category: MediaItemCategory) {
-        Haptic.selection.generate()
-        collectionView.contentOffset.y = 0
-        output.categorySelectionEventTriggered(category: category)
-    }
-    
-    func collectionViewDidRequestHeaderAction(_ sender: PickerCollectionDataSource) {
-        output.fullAccessRequestEventTriggered()
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelect mediaItem: MediaItem) {
         Haptic.selection.generate()
-        viewModel.selectedItems = dataSource.selectedItems
         output.mediaItemSelectionEventTriggered(mediaItem: mediaItem)
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselect mediaItem: MediaItem) {
-        viewModel.selectedItems = dataSource.selectedItems
+        Haptic.selection.generate()
         output.mediaItemDeselectionEventTriggered(mediaItem: mediaItem)
     }
 }
-
-// MARK: - PermissionsPlaceholderViewDelegate
-
-extension PickerViewController: PermissionsPlaceholderViewDelegate {
-    public func permissionsPlaceholderViewDidRequestSettings(_ sender: PermissionsPlaceholderView) {
-        output.fullAccessRequestEventTriggered()
-    }
-
-    public func permissionsPlaceholderViewDidRequestActivate(_ sender: PermissionsPlaceholderView) {
-        output.activationRequestEventTriggered()
-    }
-}
-

@@ -1,18 +1,8 @@
 import UIKit
 import CoreUI
 
-open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, PickerCell {
+open class PickerCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - Static Properties
-
-    public class var identifier: String {
-        return "DefaultPickerCollectionViewCell"
-    }
-
-    public class func register(in collectionView: UICollectionView) {
-        collectionView.register(DefaultPickerCollectionViewCell.self, forCellWithReuseIdentifier: Self.identifier)
-    }
-
     // MARK: - Public Properties
 
     public var item: MediaItem?
@@ -57,7 +47,16 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
         view.tintColor = .white
         return view
     }()
-
+    
+    public lazy var selectionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Label"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 19, weight: .medium)
+        label.clipsToBounds = true
+        return label
+    }()
+    
     public let selectionView = UIView()
 
     // MARK: - Initialization
@@ -76,7 +75,8 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
     // MARK: - Setup
 
     private func setupViews() {
-        [imageView, floatingElementsContainer, selectionView].forEach {
+        [imageView, floatingElementsContainer, selectionView, selectionLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
             $0.isUserInteractionEnabled = false
         }
@@ -107,7 +107,7 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
             
             // LivePhotoBadgeImageView
             livePhotoBadgeImageView.topAnchor.constraint(equalTo: floatingElementsContainer.topAnchor, constant: 5),
-            livePhotoBadgeImageView.trailingAnchor.constraint(equalTo: floatingElementsContainer.trailingAnchor, constant: -5),
+            livePhotoBadgeImageView.leadingAnchor.constraint(equalTo: floatingElementsContainer.leadingAnchor, constant: 5),
    
             // DurationLabel
             durationLabel.bottomAnchor.constraint(equalTo: floatingElementsContainer.bottomAnchor, constant: -5),
@@ -115,14 +115,25 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
             
             // FavoriteBadgeImageView
             favoriteBadgeImageView.bottomAnchor.constraint(equalTo: floatingElementsContainer.bottomAnchor, constant: -5),
-            favoriteBadgeImageView.leadingAnchor.constraint(equalTo: floatingElementsContainer.leadingAnchor, constant: 5)
+            favoriteBadgeImageView.leadingAnchor.constraint(equalTo: floatingElementsContainer.leadingAnchor, constant: 5),
+            
+            // SelectionLabel
+            selectionLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7),
+            selectionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -7)
         ])
-
+        
+        selectionLabel.widthAnchor.constraint(equalToConstant: 36).isActive = true
+        selectionLabel.heightAnchor.constraint(equalToConstant: 36).isActive = true
        
     }
 
     // MARK: - Cell Lifecycle
 
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        selectionLabel.roundCorners(to: .rounded)
+    }
+    
     public override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
@@ -130,7 +141,7 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
 
     // MARK: - Configuration
 
-    public func configure(with item: MediaItem, selectCount: Int, shouldDisplayLivePhotoBage: Bool) {
+    public func configure(with item: MediaItem, representativeIndex: Int? ,  shouldDisplayLivePhotoBage: Bool) {
         self.item = item
         imageView.image = item.thumbnail
         
@@ -144,12 +155,23 @@ open class DefaultPickerCollectionViewCell: HighlightedCollectionViewCell, Picke
             durationLabel.isHidden = true
         }
         
-        let isSelected = selectCount > 0
-        selectionView.backgroundColor = colorScheme?.title.withAlphaComponent(0.3)
-        selectionView.alpha = isSelected ? 1 : 0
-        
-        contentView.layer.borderWidth = isSelected ? 2.5 : 0
+        selectionView.backgroundColor = colorScheme?.background.withAlphaComponent(0.4)
         contentView.layer.borderColor = colorScheme?.title.cgColor
+        selectionLabel.textColor = colorScheme?.background
+        selectionLabel.backgroundColor = colorScheme?.title
+        
+        if let representativeIndex = representativeIndex {
+            selectionLabel.text = "\((representativeIndex) + 1)"
+            selectionView.alpha = 1
+            selectionLabel.alpha = 1
+            contentView.layer.borderWidth = 3
+        } else {
+            selectionLabel.text = ""
+            selectionView.alpha = 0
+            selectionLabel.alpha = 0
+            contentView.layer.borderWidth = 0
+        }
+        
     }
     
     public func reloadThumbnail() {

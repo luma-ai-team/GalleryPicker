@@ -12,13 +12,11 @@ public final class PickerState {
     public var selectedItems: [MediaItem] = []
     public internal(set) var permissionStatus: PHAuthorizationStatus = .notDetermined
     var mediaItemFetchResult: MediaItemFetchResult?
-    var selectedCategory: MediaItemCategory?
     var observer: Observer = .init()
     
     var noMedia: Bool = false
 
     public init(pickerConfiguration: PickerConfiguration) {
         self.pickerConfiguration = pickerConfiguration
-        selectedCategory = pickerConfiguration.categories.first
     }
 }

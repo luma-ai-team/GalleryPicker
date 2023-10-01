@@ -6,7 +6,7 @@ import AVFoundation
 import CoreUI
 import Combine
 
-public enum PeekPreviewViewControllerSource {
+public enum PeekViewControllerSource {
     case mediaItem(MediaItem)
     case image(UIImage)
     case video(AVAsset)
@@ -23,18 +23,18 @@ public enum PeekPreviewViewControllerSource {
     }
 }
 
-public class PeekPreviewViewController: UIViewController {
+public class PeekViewController: UIViewController {
 
-    @IBOutlet weak var playerView: PlayerView!
-    @IBOutlet weak public var imageView: UIImageView!
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    public var playerView = PlayerView()
+    public var imageView = UIImageView()
+    public var indicator = UIActivityIndicatorView(style: .large)
     
     private var cancellable: AnyCancellable?
     
     private let ratio: CGFloat
-    private let source: PeekPreviewViewControllerSource
+    private let source: PeekViewControllerSource
 
-    public init(with source: PeekPreviewViewControllerSource, ratio: CGFloat? = nil) {
+    public init(with source: PeekViewControllerSource, ratio: CGFloat? = nil) {
         self.source = source
         self.ratio = ratio ?? source.ratio
         super.init(nibName: nil, bundle: Bundle.module)
@@ -45,12 +45,25 @@ public class PeekPreviewViewController: UIViewController {
     }
 
     deinit {
-        playerView?.player = nil
+        playerView.player = nil
         cancellable?.cancel()
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(imageView)
+        view.addSubview(playerView)
+        view.addSubview(indicator)
+        
+        indicator.tintColor = .white
+        indicator.color = .white
+        indicator.startAnimating()
+        
+        imageView.bindMarginsToSuperview()
+        playerView.bindMarginsToSuperview()
+        indicator.center(in: view)
+        
         setupContent()
         imageView.contentMode = .scaleAspectFill
         preferredContentSize = AVMakeRect(aspectRatio: CGSize(width: ratio, height: 1),
@@ -81,7 +94,7 @@ public class PeekPreviewViewController: UIViewController {
     private func fetchAsset(with mediaItem: MediaItem) {
         GalleryAssetService.shared.fetchContent(for: [mediaItem]) { [weak self] (_, progress) in
             print(progress)
-            self?.indicator.isHidden = false 
+            self?.indicator.isHidden = false
         } completion: { [weak self] results in
             self?.handleFetchResults(results)
         }

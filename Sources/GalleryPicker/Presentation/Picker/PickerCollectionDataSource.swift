@@ -11,24 +11,19 @@ import CoreUI
 
 protocol PickerCollectionDataSourceOutput: AnyObject {
     func collectionView(_ collectionView: UICollectionView, didSelect mediaItem: MediaItem)
-    func collectionView(didSelect category: MediaItemCategory)
     func collectionView(_ collectionView: UICollectionView, didDeselect mediaItem: MediaItem)
-    func collectionViewDidRequestHeaderAction(_ sender: PickerCollectionDataSource)
 }
 
 final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     enum Header {
         case limitedAcces(ColorScheme)
-        case searchScope([MediaItemCategory], ColorScheme)
         case none
         
         var identifier: String {
             switch self {
             case .limitedAcces:
-                return LimitedAccessCollectionHeaderCell.identifier
-            case .searchScope:
-                return SearchScopeCollectionHeaderCell.identifier
+                return "OpenSettingsHeaderCell"
             case .none:
                 return ""
             }
@@ -37,8 +32,7 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
     
     let fetchResult: PHFetchResult<PHAsset>
     let header: Header
-    let cellReuseIdentifier: String
-    var pickerSelectionStyle: PickerSelectionStyle = .selection(limit: 1)
+    var selectionLimit = 1
     var shouldPreloadMetadata: Bool
     var colorScheme: ColorScheme
     var items: [IndexPath: MediaItem] = [:]
@@ -48,14 +42,12 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
     private let assetCount: Int
     
     init(fetchResult: PHFetchResult<PHAsset>,
-         cellReuseIdentifier: String = DefaultPickerCollectionViewCell.identifier,
          shouldPreloadItemMetadata: Bool,
          header: Header,
          colorScheme: ColorScheme) {
         self.colorScheme = colorScheme
         self.header = header
         self.fetchResult = fetchResult
-        self.cellReuseIdentifier = cellReuseIdentifier
         self.shouldPreloadMetadata = shouldPreloadItemMetadata
         assetCount = fetchResult.count
     }
@@ -69,8 +61,8 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier,
-                                                            for: indexPath) as? PickerCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PickerCollectionViewCell",
+                                                            for: indexPath) as? PickerCollectionViewCell else {
             return .init()
         }
 
@@ -95,15 +87,15 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         let baseSize = self.collectionView(collectionView, layout: collectionView.collectionViewLayout, sizeForItemAt: indexPath)
         let scaledSize = baseSize.applying(.init(scaleX: scale, y: scale))
      
-        let selectCount = selectedItems.filter { $0 == item }.count
-        cell.configure(with: item, selectCount: selectCount, shouldDisplayLivePhotoBage: shouldPreloadMetadata)
+        let representativeIndex = selectedItems.firstIndex(where: {$0 == item})
+        cell.configure(with: item, representativeIndex: representativeIndex, shouldDisplayLivePhotoBage: shouldPreloadMetadata)
         
         GalleryAssetService.shared.fetchThumbnail(for: item, size: scaledSize) { (image: UIImage?) in
             if item.identifier == cell.item?.identifier {
                 return cell.reloadThumbnail()
             }
 
-            for case let cell as PickerCell in collectionView.visibleCells where cell.item?.identifier == item.identifier {
+            for case let cell as PickerCollectionViewCell in collectionView.visibleCells where cell.item?.identifier == item.identifier {
                 return cell.reloadThumbnail()
             }
         }
@@ -115,30 +107,21 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         guard let mediaItem = items[indexPath] else {
             return
         }
-
+        
         mediaItem.updateAssetMetadata()
-                
-        switch pickerSelectionStyle {
-        case .selection(let limit, _):
-            if let index = selectedItems.firstIndex(of: mediaItem) {
-                selectedItems.remove(at: index)
-                output?.collectionView(collectionView, didDeselect: mediaItem)
-            }
-            else if selectedItems.count < limit {
-                selectedItems.append(mediaItem)
-                output?.collectionView(collectionView, didSelect: mediaItem)
-            }
-
-        case .addOnly(let limit,  _):
-             if selectedItems.count < limit {
-                selectedItems.append(mediaItem)
-                output?.collectionView(collectionView, didSelect: mediaItem)
-            }
+        let limit = selectionLimit
+        
+        if selectedItems.contains(mediaItem) {
+            output?.collectionView(collectionView, didDeselect: mediaItem)
+        }
+        else if selectedItems.count < limit {
+            output?.collectionView(collectionView, didSelect: mediaItem)
         }
         
-        if let cell = collectionView.cellForItem(at: indexPath) as? PickerCell {
-            let selectedCount = selectedItems.filter { $0 == mediaItem }.count
-            cell.configure(with: mediaItem, selectCount: selectedCount, shouldDisplayLivePhotoBage: shouldPreloadMetadata)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0166666667) {
+            if let cell = collectionView.cellForItem(at: indexPath) as? PickerCollectionViewCell {
+                cell.bounceCellAnimation()
+            }
         }
     }
 
@@ -165,20 +148,10 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         case .none:
             myHeaderView = .init()
         case .limitedAcces(let colorScheme):
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: header.identifier, for: indexPath) as? LimitedAccessCollectionHeaderCell
-            headerView?.output = self
-            headerView?.configure(with: colorScheme)
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "LimitedHeaderCell", for: indexPath) as? LimitedHeaderCell
+            headerView?.applyColor(colorScheme: colorScheme)
             headerView?.backgroundColor = colorScheme.background
             myHeaderView = headerView ?? .init()
-        case .searchScope(let categories, let colorScheme):
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: header.identifier, for: indexPath) as? SearchScopeCollectionHeaderCell
-            headerView?.categoryPickerCollectionView.items = categories.map { (category: MediaItemCategory) -> CategoryItem in
-                return .init(category: category, colorScheme: colorScheme)
-            }
-            headerView?.output = self
-            headerView?.backgroundColor = colorScheme.background
-            myHeaderView = headerView ?? .init()
-            
         }
         
         return myHeaderView
@@ -191,9 +164,7 @@ final class PickerCollectionDataSource: NSObject, UICollectionViewDataSource, UI
         case .none:
             return .zero
         case .limitedAcces:
-            return .init(width: collectionView.bounds.width, height: 64)
-        case .searchScope:
-            return .init(width: collectionView.bounds.width, height: 48)
+            return .init(width: collectionView.bounds.width, height: 75)
         }
     }
 }
@@ -211,7 +182,7 @@ extension PickerCollectionDataSource {
         
         mediaItem.updateAssetMetadata()
         let previewProvider: UIContextMenuContentPreviewProvider = { () -> UIViewController? in
-            return PeekPreviewViewController(with: .mediaItem(mediaItem))
+            return PeekViewController(with: .mediaItem(mediaItem))
         }
         
         let actionProvider: UIContextMenuActionProvider = { _ -> UIMenu? in
@@ -248,22 +219,5 @@ extension PickerCollectionDataSource {
         }
     }
 }
-
-// MARK: - LimitedAccessHeaderViewOutput
-
-extension PickerCollectionDataSource: LimitedAccessCollectionHeaderCellDelegate {
-    func limitedAccessCollectionHeaderCellActionRequested(_ limitedAccessCollectionHeaderCell: LimitedAccessCollectionHeaderCell) {
-        output?.collectionViewDidRequestHeaderAction(self)
-    }
-}
-
-// MARK: - SearchScopeCollectionHeaderCellOutput
-
-extension PickerCollectionDataSource: SearchScopeCollectionHeaderCellOutput {
-    func searchScopeCollectionHeaderCell(_ searchScopeCollectionHeaderCell: SearchScopeCollectionHeaderCell, didSelect category: MediaItemCategory) {
-        output?.collectionView(didSelect: category)
-    }
-}
-
 
 

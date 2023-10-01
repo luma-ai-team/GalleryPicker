@@ -12,22 +12,10 @@ import CoreUI
 
 public class AlbumsConfiguration {
     public var filter: MediaItemFilter = .init()
-    public var appearance: AlbumsAppearance
+    public var colorScheme: ColorScheme
     public init(colorScheme: ColorScheme) {
-        appearance = AlbumsAppearance(colorScheme: colorScheme)
-    }
-}
-
-
-open class AlbumsAppearance {
-    public let colorScheme: ColorScheme
-    public let cellHeight: CGFloat
-    
-    public init( colorScheme: ColorScheme,
-                 cellHeight: CGFloat = 100.0
-    ) {
         self.colorScheme = colorScheme
-        self.cellHeight = cellHeight
     }
 }
+
 

@@ -37,13 +37,13 @@ extension ClassicGalleryPickerCoordinator: AssetFetchModuleOutput {
     }
     
     func assetFetchModuleCancelledOperation(_ moduleInput: AssetFetchModuleInput) {
-        galleryPickerModule.input.finalize()
+       // galleryPickerModule.input.finalize()
     }
 
     func assetFetchModuleFinishedOperation(_ moduleInput: AssetFetchModuleInput, asset: AVAsset, for item: GalleryPicker.MediaItem) {
         print(asset)
-        galleryPickerModule.input.finalize()
-
+     //   galleryPickerModule.input.finalize()
     }
+    
 }
 

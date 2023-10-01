@@ -23,14 +23,20 @@ public final class AlbumsViewController: UIViewController {
     private let output: AlbumsViewOutput
 
     lazy var tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.sectionHeaderHeight = 0.0
+        tableView.sectionFooterHeight = 0.0
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
         tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1))
         return tableView
     }()
     
@@ -49,23 +55,15 @@ public final class AlbumsViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
-        tableView.register(DrawerTableVieWCell.self, forCellReuseIdentifier: DrawerTableVieWCell.identifier)
-        tableView.sectionHeaderHeight = 10
-        
-        let nib = UINib(nibName: AlbumsTableViewCell.identifier, bundle: Bundle.module)
-        tableView.register(nib, forCellReuseIdentifier: AlbumsTableViewCell.identifier)
-        
+        tableView.register(DrawerCell.self, forCellReuseIdentifier: "DrawerCell")
+        tableView.register(AlbumCell.self, forCellReuseIdentifier: "AlbumCell")
+        tableView.bindMarginsToSuperview()
         output.viewDidLoad()
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         output.viewWillDisappear()
-    }
-
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -92,19 +90,20 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
      
         guard indexPath.section == 1 else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: DrawerTableVieWCell.identifier, for: indexPath) as? DrawerTableVieWCell
-            cell?.drawerView.backgroundColor = viewModel.albumsAppearance.colorScheme.title
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DrawerCell", for: indexPath) as? DrawerCell
+            cell?.drawerImageView.tintColor = viewModel.colorScheme.title
             cell?.selectionStyle = .none
             cell?.layoutIfNeeded()
+            cell?.backgroundColor = .clear
             return cell ?? .init()
         }
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: AlbumsTableViewCell.identifier, for: indexPath) as? AlbumsTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumCell", for: indexPath) as? AlbumCell else {
             return .init()
         }
         
         let album = viewModel.albums[indexPath.row]
-        cell.configure(with: album, and: viewModel.albumsAppearance)
+        cell.configure(with: album, colorScheme: viewModel.colorScheme)
         cell.selectionStyle = .none
         
         GalleryAssetService.shared.fetchThumbnail(for: album,
@@ -115,7 +114,7 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
                 return
             }
 
-            cell.configure(with: album, and: self.viewModel.albumsAppearance)
+            cell.configure(with: album, colorScheme: viewModel.colorScheme)
         }
 
         return cell
@@ -129,10 +128,7 @@ extension AlbumsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 27
-        }
-        return viewModel.albumsAppearance.cellHeight
+        return indexPath.section == 0 ? 30 : 90
     }
 }
 
@@ -143,7 +139,7 @@ extension AlbumsViewController: AlbumsViewInput, ForceViewUpdate {
     func update(with viewModel: AlbumsViewModel, force: Bool, animated: Bool) {
         self.viewModel = viewModel
 
-        view.backgroundColor = viewModel.albumsAppearance.colorScheme.foreground
+        view.backgroundColor = viewModel.colorScheme.background
         tableView.reloadData()
     }
 }

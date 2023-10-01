@@ -26,7 +26,7 @@ public class GalleryPickerFactory {
         let galleryPickerConfiguration = GalleryPickerConfiguration(colorScheme: colorScheme)
         galleryPickerConfiguration.filter.shouldTreatLivePhotosAsVideos = false
         galleryPickerConfiguration.filter.supportedMediaTypes = .all
-        galleryPickerConfiguration.pickerConfiguration.pickerSelectionStyle = .selection(limit: 1)
+        galleryPickerConfiguration.pickerConfiguration.selectionLimit = 1
         galleryPickerConfiguration.appearance = galleryPickerAppearance
         return galleryPickerConfiguration
     }

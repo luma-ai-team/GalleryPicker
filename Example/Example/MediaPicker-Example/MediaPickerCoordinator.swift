@@ -25,7 +25,7 @@ final class MediaPickerCoordinator: BaseCoordinator<UIViewController> {
         
         let galleryPickerConfig = GalleryPickerConfiguration(colorScheme: Constants.colorScheme)
         let galleryPickerModule = GalleryPickerModule(state: GalleryPickerState(galleryPickerConfiguration: galleryPickerConfig))
-        galleryPickerModule.input.state.galleryPickerConfiguration.pickerConfiguration.pickerSelectionStyle = .addOnly(limit: slots.count)
+        galleryPickerModule.input.state.galleryPickerConfiguration.pickerConfiguration.selectionLimit = slots.count
         galleryPickerModule.input.state.galleryPickerConfiguration.pickerConfiguration.enableSystemGallery = false
         
         self.pickerModule = galleryPickerModule.input.pickerModule
@@ -68,7 +68,7 @@ final class MediaPickerCoordinator: BaseCoordinator<UIViewController> {
 extension MediaPickerCoordinator: PixabayModuleOutput {
     func pixabayModule(_ moduleInput: PixabayModuleInput, wantsToSelectPixabayMedia pixabayMedia: PixabayMedia, thumbnail: UIImage?) {
         let totalSelectedItems = pickerModule.input.state.selectedItems.count
-        guard totalSelectedItems < pickerModule.input.state.pickerConfiguration.pickerSelectionStyle.limit else {
+        guard totalSelectedItems < pickerModule.input.state.pickerConfiguration.selectionLimit else {
             print("too many picks, can't sorry..")
             return
         }
@@ -108,7 +108,6 @@ extension MediaPickerCoordinator: PickerModuleOutput {
     }
     func pickerModule(_ moduleInput: PickerModuleInput, didDeselect mediaItem: MediaItem) {}
     func pickerModuleDidRequestActivate(_ moduleInput: PickerModuleInput) {}
-    func pickerModuleWantsToOpenFullAccessSettings(_ moduleInput: PickerModuleInput) {}
     func pickerModuleDidRequestSystemPicker(_ moduleInput: PickerModuleInput) {}
 }
 

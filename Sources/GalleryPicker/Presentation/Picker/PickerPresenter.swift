@@ -20,10 +20,6 @@ final class PickerPresenter {
 
 extension PickerPresenter: PickerViewOutput {
     
-    func fullAccessRequestEventTriggered() {
-        output?.pickerModuleWantsToOpenFullAccessSettings(self)
-    }
-
     func activationRequestEventTriggered() {
         output?.pickerModuleDidRequestActivate(self)
     }
@@ -34,6 +30,7 @@ extension PickerPresenter: PickerViewOutput {
     
     func mediaItemSelectionEventTriggered(mediaItem: MediaItem) {
         state.selectedItems.append(mediaItem)
+        update(force: false, animated: false)
         output?.pickerModule(self, didSelect: mediaItem)
     }
 
@@ -41,15 +38,10 @@ extension PickerPresenter: PickerViewOutput {
         if let index = state.selectedItems.firstIndex(of: mediaItem) {
             state.selectedItems.remove(at: index)
         }
-        
+        update(force: false, animated: false)
         output?.pickerModule(self, didDeselect: mediaItem)
     }
 
-    func categorySelectionEventTriggered(category: MediaItemCategory) {
-        state.selectedCategory = category
-        fetchContent()
-        update(force: false, animated: true)
-    }
     
     func viewDidLoad() {
         update(force: true, animated: false)
@@ -81,7 +73,6 @@ extension PickerPresenter: PickerViewOutput {
 
     private func fetchPhotos(in album: Album) {
         let filter = state.pickerConfiguration.filter
-        filter.auxiliaryPredicate = state.selectedCategory?.predicate
         GalleryAssetService.shared.fetchMediaItemList(in: album,
                                                       filter: filter) { [weak self] (result: MediaItemFetchResult) in
             guard let self = self else {
