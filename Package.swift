@@ -1,4 +1,4 @@
-// swift-tools-version:5.8
+// swift-tools-version:5.7
 
 import PackageDescription
 
@@ -14,8 +14,8 @@ let package = Package(
             targets: ["GalleryPicker"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/luma-ai-team/PermissionKit", branch: "master"),
-        .package(url: "https://github.com/luma-ai-team/CoreUI", branch: "master")
+        .package(url: "https://github.com/luma-ai-team/PermissionKit", from: "1.0.0"),
+        .package(url: "https://github.com/luma-ai-team/CoreUI", from: "1.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
