@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/luma-ai-team/CoreUI",
       "state" : {
-        "branch" : "master",
-        "revision" : "88d3f22753fe3bcc15b0185ee286ae3c9db2c3e9"
+        "revision" : "495fea846648cd4ed66eec443a4cb632102c97ed",
+        "version" : "1.0.0"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/luma-ai-team/PermissionKit",
       "state" : {
-        "branch" : "master",
-        "revision" : "05a38822b23638d459b4dbbaf1b00dc05887c2fa"
+        "revision" : "05a38822b23638d459b4dbbaf1b00dc05887c2fa",
+        "version" : "1.0.0"
       }
     },
     {

@@ -12,7 +12,7 @@ import CoreUI
 public class AlbumsRotatableButton: BounceButton {
 
     
-    private let arrowView = UIImageView()
+    public let arrowView = UIImageView()
     private let spacing: CGFloat = 0.0
     
     public var isAlbumPresented = false {
