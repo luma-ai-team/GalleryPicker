@@ -38,7 +38,8 @@ public class GalleryPickerAppearance {
     public var leftBarButtons: [UIButton]
     public var rightBarButtons: [UIButton]
     public var navigationBarStyle: StyledNavigationController.SNCAppeareance
-    
+    public var hidesNavigationBarInEmptyState: Bool = true
+
     public init(
         colorScheme: ColorScheme,
         leftBarButtons: [UIButton] = [],

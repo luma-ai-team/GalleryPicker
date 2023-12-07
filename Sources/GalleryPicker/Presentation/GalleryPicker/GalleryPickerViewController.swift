@@ -157,13 +157,20 @@ extension GalleryPickerViewController: GalleryPickerViewInput, ForceViewUpdate {
             albumsRotatableButton.isAlbumPresented = isVisible
         }
         
-        if oldViewModel.hasContent == false {
+        if oldViewModel.hasContent == false,
+           viewModel.galleryPickerConfiguration.appearance.hidesNavigationBarInEmptyState {
             navigationBarAlpha = 0.0
         }
         
         update(new: viewModel, old: oldViewModel, keyPath: \.hasContent, force: force) { (hasContent: Bool) in
             UIView.animate(withDuration: 0.25) {
-                self.navigationBarAlpha = hasContent ? 1.0 : 0.0
+                if hasContent == false,
+                   viewModel.galleryPickerConfiguration.appearance.hidesNavigationBarInEmptyState {
+                    self.navigationBarAlpha = 0.0
+                }
+                else {
+                    self.navigationBarAlpha = 1.0
+                }
             }
         }
     }
