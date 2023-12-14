@@ -103,7 +103,9 @@ extension AssetFetchViewController: AssetFetchViewInput {
             setContentView(errorImportingView, animated: animated)
         case .fetching(let text, let progress):
             view.alpha = 1
-            setContentView(importingFromICloudView, animated: animated)
+            if contentView !== importingFromICloudView {
+                setContentView(importingFromICloudView, animated: animated)
+            }
             importingFromICloudView.title.text = text
             importingFromICloudView.progressView.setProgress(progress: CGFloat(progress),
                                                              animation: .animated(duration: 0.15))
